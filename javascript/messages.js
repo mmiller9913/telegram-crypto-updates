@@ -2,8 +2,8 @@ const endpoints = require('./endpoints');
 const telegram2 = require('../telegram2');
 require('dotenv').config({ path: '.env' });
 
-// const chatId = process.env.CHAT_ID_WITH_ME;
-const chatId = process.env.CHAT_ID_WITH_GROUP;
+const chatId = process.env.CHAT_ID_WITH_ME;
+// const chatId = process.env.CHAT_ID_WITH_GROUP;
 
 exports.sendGoodMorningMessage = async() => {
     const currentBtcPrice = Math.trunc(await endpoints.getBTCPrice());
