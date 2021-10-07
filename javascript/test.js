@@ -6,10 +6,10 @@
 //     console.log('running a task every minute');
 //   });
 
-// "testing-heroku-scheduler": "/usr/local/bin/ node -e 'require(\"./test'\").sendTest()'"
+// "testing-heroku-scheduler": "/usr/local/bin/ node -e 'require(\"./javascript/test'\").sendTest()'"
 
 // const messages = require('./javascript/messages');
-console.log("Testing Heroku scheduler");
+// console.log("Testing Heroku scheduler");
 
 // exports.sendTest = () => {
 //   console.log('test sent');
