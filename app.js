@@ -25,6 +25,6 @@ app.get('/', (req, res) => {
 var http = require("http");
 setInterval(function () {
     http.get("http://telegram-crypto-updates.herokuapp.com");
-}, 30000); // used to run every 5 minutes, now run every 30 seconds
+}, 60000); // run every 1 minute
 
 module.exports = app;
