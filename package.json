@@ -6,8 +6,7 @@
     "node": "14.17.0"
   },
   "scripts": {
-    "start": "concurrently \"node start.js\" \"node telegram2.js\"", 
-    "testing-heroku-scheduler": "node test.js"
+    "start": "node starts.js"
   },
   "dependencies": {
     "body-parser": "^1.19.0",

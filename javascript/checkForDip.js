@@ -6,7 +6,7 @@ const endpoints = require('./endpoints');
 const messages = require('./messages');
 
 exports.checkForDip = async() => {
-    // console.log('Checking for dip...');
+    console.log('Checking for dip...');
     const currentBtcPrice = Math.trunc(await endpoints.getBTCPrice());
     const currentEthPrice = Math.trunc(await endpoints.getETHPrice());
     // console.log(lastBtcPrice, currentBtcPrice);

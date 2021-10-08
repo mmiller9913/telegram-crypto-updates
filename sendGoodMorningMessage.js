@@ -1,11 +1,31 @@
-const endpoints = require('./endpoints');
-const telegram2 = require('../telegramBot');
+//NOTE: this script runs via a cron job at a specified time of day using Heroku Scheduler
+
+const endpoints = require('./javascript/endpoints');
+const telegramBot = require('./telegramBot');
 require('dotenv').config({ path: '.env' });
 
-const chatId = process.env.CHAT_ID_WITH_ME;
-// const chatId = process.env.CHAT_ID_WITH_GROUP;
+// //Telegram bot stuff
+// const TelegramBot = require('node-telegram-bot-api');
 
-exports.sendGoodMorningMessage = async() => {
+// //bot name = "Daily Price Update Bot", bot username = 'matts_daily_price_update_bot'
+// // const token = '1684374267:AAE4UhwNQ4O5hsB33y1aX3wakbrA8-JMwGY';
+
+// //bot name = "Daily Price Update Bot v2", bot username = 'matts_daily_price_update_v2_bot'
+// const token = process.env.V2_BOT_TELEGRAM_TOKEN;
+
+// //bot name = "Daily Price Update Bot v3", bot username = 'matts_daily_price_update_v3_bot'
+// //this is the bot that's currently deployed and active in the telegram group
+// // const token = process.env.V3_BOT_TELEGRAM_TOKEN;
+
+// //bot name = "Daily Price Update Bot v4", bot username = 'matts_daily_price_update_v3_bot'
+// // const token = process.env.V4_BOT_TELEGRAM_TOKEN;
+
+// bot = new TelegramBot(token, { polling: true });
+
+// const chatId = process.env.CHAT_ID_WITH_ME;
+// // const chatId = process.env.CHAT_ID_WITH_GROUP;
+
+sendGoodMorningMessage = async() => {
     const currentBtcPrice = Math.trunc(await endpoints.getBTCPrice());
     const currentEthPrice = Math.trunc(await endpoints.getETHPrice());
     const historicalBitcoinValues = await endpoints.getHistoricalBTCPrice();
@@ -21,11 +41,7 @@ exports.sendGoodMorningMessage = async() => {
     \n-Ethereum: $${currentEthPrice.toLocaleString()} (${currentEthPrice > priceOfEthAtStartOfYear ? 'up' : 'down'} ${Math.trunc((currentEthPrice/priceOfEthAtStartOfYear - 1) * 100)}% YTD)
     \nOn this day last year, the price of Bitcoin was $${(Math.trunc(priceOfBtcOnThisDayLastYear)).toLocaleString()} and the price of Ethereum was $${(Math.trunc(priceOfEthOnThisDayLastYear)).toLocaleString()}
     `;
-    telegram2.bot.sendMessage(chatId, text);
+    telegramBot.bot.sendMessage(telegramBot.chatId, text);
 }
 
-exports.sendDipAlertMessage = (coin, currentPrice, lastPrice) => {
-    const text = `${coin} IS DIPPING.\n\nIt dropped from $${lastPrice} to $${currentPrice} over the last 10 minutes—a dip of ${Math.trunc((1 - currentPrice / lastPrice) * 100)}%\n\nBTFD!!`;
-    telegram2.bot.sendMessage(chatId, text);
-}
-
+sendGoodMorningMessage();
