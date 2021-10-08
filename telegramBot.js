@@ -22,8 +22,6 @@ exports.chatId = process.env.CHAT_ID_WITH_ME;
 
 
 
-
-
 //imports
 // const messages = require('./javascript/messages');
 
