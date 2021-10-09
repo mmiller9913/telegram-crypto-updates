@@ -13,10 +13,13 @@ sendDipAlertMessage = (coin, currentPrice, lastPrice) => {
 }
 
 checkForDip = async () => {
+    //reading lasyBtcPrice & lastEthPrice from the prices.js fi;e
     let lastEthPrice = prices.lastEthPrice;
     let lastBtcPrice = prices.lastBtcPrice;
+
     console.log(lastBtcPrice, lastEthPrice);
     console.log('Checking for dip...');
+
     const currentBtcPrice = Math.trunc(await endpoints.getBTCPrice());
     const currentEthPrice = Math.trunc(await endpoints.getETHPrice());
 
@@ -32,7 +35,8 @@ checkForDip = async () => {
         sendDipAlertMessage(coin, currentEthPrice, lastEthPrice);
     }
 
-    fs.writeFile('prices.js', `module.exports = {$lastBtcPrice:${currentBtcPrice}, lastEthPrice:${currentEthPrice}}`, function (err) {
+    //updating lastBtcPrice & lastEthPrice in the prices.js file
+    fs.writeFile('prices.js', `module.exports = {lastBtcPrice:${currentBtcPrice}, lastEthPrice:${currentEthPrice}}`, function (err) {
         if (err)
             console.log(err);
         else
