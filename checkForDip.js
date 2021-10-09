@@ -2,7 +2,7 @@
 
 const endpoints = require('./javascript/endpoints');
 const telegramBot = require('./telegramBot');
-const prices = require('./javascript/prices');
+const prices = require('./prices');
 var fs = require('fs');
 require('dotenv').config({ path: '.env' });
 
@@ -52,5 +52,5 @@ setTimeout(() => {
     telegramBot.bot.stopPolling();
 }, 15000);
 
-// const data = fs.readFileSync('./javascript/prices.js', 'utf8'); 
+// const data = fs.readFileSync('./prices.js', 'utf8'); 
 // console.log(data);
