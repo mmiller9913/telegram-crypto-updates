@@ -41,10 +41,12 @@ checkForDip = async () => {
 checkForDip();
 
 //need to turn off the bot 
-stopTimeout(() => {
+setTimeout(() => {
     console.log('turning off the bot');
     telegramBot.bot.stopPolling();
 }, 30000);
+
+// console.log(process.env);
 
 //THIS IS WHERE I LEFT OFF, NEED TO PUSH TO HEROKU AND TEST THIS FILE SPECIFICIALLY IN HEROKU SCHEDULER
 //NEED TO KNOW IF VARIABLES ARE STORED
