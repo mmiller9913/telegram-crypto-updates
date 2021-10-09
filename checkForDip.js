@@ -3,12 +3,9 @@
 const endpoints = require('./javascript/endpoints');
 const telegramBot = require('./telegramBot');
 const prices = require('./prices');
+var fs = require('fs');
 require('dotenv').config({ path: '.env' });
 
-
-// let lastBtcPrice;
-// let lastEthPrice;
-// let coin;
 
 sendDipAlertMessage = (coin, currentPrice, lastPrice) => {
     const text = `${coin} IS DIPPING.\n\nIt dropped from $${lastPrice} to $${currentPrice} over the last 10 minutes—a dip of ${Math.trunc((1 - currentPrice / lastPrice) * 100)}%\n\nBTFD!!`;
@@ -35,13 +32,18 @@ checkForDip = async () => {
         sendDipAlertMessage(coin, currentEthPrice, lastEthPrice);
     }
 
-    prices.lastBtcPrice = currentBtcPrice;
-    prices.lastEthPrice = currentEthPrice;
+    fs.writeFile('prices.js', `module.exports = {${lastBtcPrice}:${currentBtcPrice}, ${lastEthPrice}:${currentEthPrice}}`, function (err) {
+        if (err)
+            console.log(err);
+        else
+        console.log('lastBtcPrice & lastEth price update in prices.js');
+    });
 }
 
 checkForDip();
+//https://www.tutorialsteacher.com/nodejs/nodejs-file-system
 
-//need to turn off the bot 
+//need to turn off the bot
 setTimeout(() => {
     console.log('Turning off the bot');
     telegramBot.bot.stopPolling();
