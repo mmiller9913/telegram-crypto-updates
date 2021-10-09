@@ -43,6 +43,7 @@ checkForDip();
 //need to turn off the bot 
 setTimeout(() => {
     console.log('turning off the bot');
+    console.log(process.env);
     telegramBot.bot.stopPolling();
 }, 30000);
 
