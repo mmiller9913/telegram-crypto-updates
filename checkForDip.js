@@ -32,7 +32,7 @@ checkForDip = async () => {
         sendDipAlertMessage(coin, currentEthPrice, lastEthPrice);
     }
 
-    fs.writeFile('prices.js', `module.exports = {${lastBtcPrice}:${currentBtcPrice}, ${lastEthPrice}:${currentEthPrice}}`, function (err) {
+    fs.writeFile('prices.js', `module.exports = {$lastBtcPrice:${currentBtcPrice}, lastEthPrice:${currentEthPrice}}`, function (err) {
         if (err)
             console.log(err);
         else
