@@ -17,7 +17,7 @@ checkForDip = async () => {
     let lastEthPrice = prices.lastEthPrice;
     let lastBtcPrice = prices.lastBtcPrice;
 
-    // console.log(lastBtcPrice, lastEthPrice);
+    console.log(lastBtcPrice, lastEthPrice);
     console.log('Checking for dip...');
 
     const currentBtcPrice = Math.trunc(await endpoints.getBTCPrice());
@@ -39,8 +39,7 @@ checkForDip = async () => {
     fs.writeFile('prices.js', `module.exports = {lastBtcPrice:${currentBtcPrice}, lastEthPrice:${currentEthPrice}}`, function (err) {
         if (err)
             console.log(err);
-        else
-        console.log('lastBtcPrice & lastEthPrice updated in prices.js');
+        else console.log('lastBtcPrice & lastEthPrice updated in prices.js');
     });
 }
 
@@ -53,7 +52,5 @@ setTimeout(() => {
     telegramBot.bot.stopPolling();
 }, 30000);
 
-//THIS IS WHERE I LEFT OFF, NEED TO PUSH TO HEROKU AND TEST THIS FILE SPECIFICIALLY IN HEROKU SCHEDULER
-//NEED TO KNOW IF VARIABLES ARE STORED
-//they aren't, and get polling error that multiple instances of bot are running
-//think it has to do w/ what's inside sendDipAlertMessage function
+// const data = fs.readFileSync('prices.js', 'utf8'); 
+// console.log(data);
