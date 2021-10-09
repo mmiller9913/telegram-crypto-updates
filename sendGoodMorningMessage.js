@@ -24,3 +24,10 @@ sendGoodMorningMessage = async() => {
 }
 
 sendGoodMorningMessage();
+
+
+//need to turn off the bot after 15 seconds
+setTimeout(() => {
+    console.log('Turning off the bot');
+    telegramBot.bot.stopPolling();
+}, 15000);

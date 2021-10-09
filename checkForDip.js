@@ -2,7 +2,7 @@
 
 const endpoints = require('./javascript/endpoints');
 const telegramBot = require('./telegramBot');
-const prices = require('./prices');
+const prices = require('./javascript/prices');
 var fs = require('fs');
 require('dotenv').config({ path: '.env' });
 
@@ -36,7 +36,7 @@ checkForDip = async () => {
     }
 
     //updating lastBtcPrice & lastEthPrice in the prices.js file
-    fs.writeFile('prices.js', `module.exports = {lastBtcPrice:${currentBtcPrice}, lastEthPrice:${currentEthPrice}}`, function (err) {
+    fs.writeFile('./javascript/prices.js', `module.exports = {lastBtcPrice:${currentBtcPrice}, lastEthPrice:${currentEthPrice}}`, function (err) {
         if (err)
             console.log(err);
         else console.log('lastBtcPrice & lastEthPrice updated in prices.js');
@@ -46,11 +46,11 @@ checkForDip = async () => {
 checkForDip();
 //https://www.tutorialsteacher.com/nodejs/nodejs-file-system
 
-//need to turn off the bot
+//need to turn off the bot after 15 seconds
 setTimeout(() => {
     console.log('Turning off the bot');
     telegramBot.bot.stopPolling();
-}, 30000);
+}, 15000);
 
-// const data = fs.readFileSync('prices.js', 'utf8'); 
+// const data = fs.readFileSync('./javascript/prices.js', 'utf8'); 
 // console.log(data);
