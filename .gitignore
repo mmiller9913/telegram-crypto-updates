@@ -1,5 +1,4 @@
 node_modules/
 *.log
 .env
-./javscript/insults.js
-./javascript/botCommands.js 
+google-credentials.json

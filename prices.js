@@ -1,1 +1,0 @@
-module.exports = {lastBtcPrice:54784, lastEthPrice:3591}
