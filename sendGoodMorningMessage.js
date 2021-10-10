@@ -5,6 +5,7 @@ const telegramBot = require('./telegramBot');
 require('dotenv').config({ path: '.env' });
 
 sendGoodMorningMessage = async() => {
+    console.log(`Chat ID: ${telegramBot.chatId}`);
     const currentBtcPrice = Math.trunc(await endpoints.getBTCPrice());
     const currentEthPrice = Math.trunc(await endpoints.getETHPrice());
     const historicalBitcoinValues = await endpoints.getHistoricalBTCPrice();
@@ -24,7 +25,6 @@ sendGoodMorningMessage = async() => {
 }
 
 sendGoodMorningMessage();
-
 
 //need to turn off the bot after 15 seconds
 setTimeout(() => {
