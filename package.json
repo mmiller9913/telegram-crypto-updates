@@ -10,15 +10,11 @@
   },
   "dependencies": {
     "body-parser": "^1.19.0",
-    "concurrently": "^6.2.0",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
-    "fs": "0.0.1-security",
     "googleapis": "^88.2.0",
-    "node-cron": "^3.0.0",
     "node-fetch": "^2.6.1",
-    "node-telegram-bot-api": "^0.53.0",
-    "nodemon": "^2.0.13"
+    "node-telegram-bot-api": "^0.53.0"
   }
 }
