@@ -1,13 +1,12 @@
 //NOTE: this script runs via a cron job at a specified time of day using Heroku Scheduler
 
 const endpoints = require('./javascript/endpoints');
-const telegramBot = require('./telegramBot');
 const keys = require('./google-credentials.json');
 var { google } = require('googleapis');
 require('dotenv').config({ path: '.env' });
 
 
-sendDipAlertMessage = (coin, currentPrice, lastPrice) => {
+sendDipAlertMessage = (coin, currentPrice, lastPrice, telegramBot) => {
     const text = `${coin} IS DIPPING.\n\nIt dropped from $${lastPrice} to $${currentPrice} over the last 10 minutes—a dip of ${Math.trunc((1 - currentPrice / lastPrice) * 100)}%\n\nBTFD!!`;
     telegramBot.bot.sendMessage(telegramBot.chatId, text);
 }
@@ -24,13 +23,17 @@ checkForDip = async (priceArray, cl) => {
     if (lastBtcPrice != 'undefined' && (1 - (currentBtcPrice / lastBtcPrice) >= 0.015)) { //looking for 1.5% drop every 10 minutes
         // if(lastBtcPrice && currentBtcPrice != lastBtcPrice) {
         let coin = "BITCOIN";
-        sendDipAlertMessage(coin, currentBtcPrice, lastBtcPrice);
+        const telegramBot = require('./telegramBot');
+        sendDipAlertMessage(coin, currentBtcPrice, lastBtcPrice, telegramBot);
+        turnOffBot(telegramBot);
         // console.log(`BITCOIN IS DIPPING.\n\nIt dropped from $${lastBtcPrice} to $${btcPrice} over the last 10 minutes — a dip of ${Math.trunc((1-btcPrice/lastBtcPrice) * 100)}%\n\nBTFD!!`)
     }
 
     if (lastEthPrice != 'undefined' && (1 - (currentEthPrice / lastEthPrice) >= 0.015)) { //looking for 1.5% drop every 10 minutes
         let coin = "ETHEREUM";
+        const telegramBot = require('./telegramBot');
         sendDipAlertMessage(coin, currentEthPrice, lastEthPrice);
+        turnOffBot(telegramBot);
     }
 
     updateGoogleSheet(currentBtcPrice, currentEthPrice, cl);
@@ -38,11 +41,13 @@ checkForDip = async (priceArray, cl) => {
 
 //https://www.tutorialsteacher.com/nodejs/nodejs-file-system
 
-//need to turn off the bot after 20 seconds
-setTimeout(() => {
-    console.log('Turning off the bot');
-    telegramBot.bot.stopPolling();
-}, 20000);
+//need to turn off the bot after 10 seconds
+function turnOffBot(telegramBot) {
+    setTimeout(() => {
+        console.log('Turning off the bot');
+        telegramBot.bot.stopPolling();
+    }, 10000);
+}
 
 function connectToGoogleSheet() {
     const client = new google.auth.JWT(
@@ -88,8 +93,8 @@ async function updateGoogleSheet(btcPrice, ethPrice, cl) {
     const newGoogleSheetArray = [['Last BTC Price', btcPrice], ['Last ETH Price', ethPrice]]
 
     const updateOptions = {
-        spreadsheetId: '13Auq8MGLT_RA2J6yA9inkL5TAeURyrUTww3bD2JzgYI', 
-        range: 'prices!A1:B', 
+        spreadsheetId: '13Auq8MGLT_RA2J6yA9inkL5TAeURyrUTww3bD2JzgYI',
+        range: 'prices!A1:B',
         valueInputOption: 'USER_ENTERED',
         resource: { values: newGoogleSheetArray },
     };
