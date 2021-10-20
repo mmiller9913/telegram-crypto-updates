@@ -10,3 +10,6 @@ Here's your daily update:
 -Ethereum: $3,658 (up 400% YTD)
     
 On this day last year, the price of Bitcoin was $11,430 and the price of Ethereum was $381
+
+
+It also monitors BTC & ETH for dips (1.5% or greater) every 10 minutes, and sends a "dip alert message" if identified.
