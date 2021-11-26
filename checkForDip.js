@@ -4,16 +4,14 @@ const endpoints = require('./javascript/endpoints');
 const keys = require('./google-credentials.json');
 var { google } = require('googleapis');
 require('dotenv').config({ path: '.env' });
-process.env.NTBA_FIX_319 = 1;
+process.env.NTBA_FIX_319 = 1; //this is here b/c: https://stackoverflow.com/questions/65289566/node-telegram-bot-api-deprecated-automatic-enabling-of-cancellation-of-promises
 const moment = require('moment');
-
-
 
 checkForDip = async (priceArray, cl) => {
     let lastEthPrice = priceArray[1][1];
     let lastBtcPrice = priceArray[0][1];
 
-    console.log('Checking for dip...');
+    // console.log('Checking for dip...');
 
     const currentBtcPrice = Math.trunc(await endpoints.getBTCPrice());
     const currentEthPrice = Math.trunc(await endpoints.getETHPrice());
@@ -68,7 +66,7 @@ function connectToGoogleSheet() {
         if (err) {
             console.log(err);
         } else {
-            console.log('Connected to Google Sheet');
+            // console.log('Connected to Google Sheet');
             getDataFromGoogleSheet(client);
         }
     })
@@ -107,8 +105,8 @@ async function updateGoogleSheet(btcPrice, ethPrice, cl) {
     };
 
     let response = await gsapi.spreadsheets.values.update(updateOptions);
-
-    console.log('Google Sheet successfuly updated with new BTC & ETH prices');
+    
+    console.log(`${moment().format('dddd')}, ${moment().format('l')} ${moment().format('LTS')} | Google Sheet successfuly updated with new BTC & ETH prices`)
 
 }
 

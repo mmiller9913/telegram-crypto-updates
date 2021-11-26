@@ -1,9 +1,10 @@
 //NOTE: this script runs via a cron job at a specified time of day using Heroku Scheduler
 
 const endpoints = require('./javascript/endpoints');
-const telegramBot = require('./telegramBot');
 require('dotenv').config({ path: '.env' });
+process.env.NTBA_FIX_319 = 1; //this is here b/c: https://stackoverflow.com/questions/65289566/node-telegram-bot-api-deprecated-automatic-enabling-of-cancellation-of-promises
 const moment = require('moment');
+const telegramBot = require('./telegramBot'); //this must be after the 'process.env.NTBA_FIX_319 = 1' to avoid the "node-telegram-bot-api deprecated Automatic enabling of cancellation of promises is deprecated." warning
 
 sendGoodMorningMessage = async() => {
     const currentBtcPrice = Math.trunc(await endpoints.getBTCPrice());
@@ -22,7 +23,7 @@ sendGoodMorningMessage = async() => {
     \nOn this day last year, the price of Bitcoin was $${(Math.trunc(priceOfBtcOnThisDayLastYear)).toLocaleString()} and the price of Ethereum was $${(Math.trunc(priceOfEthOnThisDayLastYear)).toLocaleString()}
     `;
     telegramBot.bot.sendMessage(telegramBot.chatId, text);
-    console.log(`${moment().format('dddd')}, ${moment().format('l')} | Good morning message sent`)
+    console.log(`${moment().format('dddd')}, ${moment().format('l')} | Good Morning message sent`)
 }
 
 sendGoodMorningMessage();
