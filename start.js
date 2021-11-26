@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const ejs = require('ejs');;
 
 //Init the app (create the express app);
-const app = express();
+app = express();
 
 //Template engine setup
 app.set('view engine', 'html');
@@ -24,12 +24,13 @@ app.get('/', (req, res) => {
 });
 
 //to keep nodejs app running indefinitely on heroku
-var http = require("http");
-setInterval(function () {
-    http.get("http://telegram-crypto-updates.herokuapp.com");
-}, 60000); // run every 1 minute
+// var http = require("http");
+// setInterval(function () {
+//     http.get("http://telegram-crypto-updates.herokuapp.com");
+// }, 60000); // run every 1 minute
 
 app.set('port', process.env.PORT || 3000);
 const server = app.listen(app.get('port'), () => {
   console.log(`App started: Express running → PORT ${server.address().port}`);
 });
+
