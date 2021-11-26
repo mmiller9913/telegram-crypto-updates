@@ -11,13 +11,8 @@ checkForDip = async (priceArray, cl) => {
     let lastEthPrice = priceArray[1][1];
     let lastBtcPrice = priceArray[0][1];
 
-    // console.log('Checking for dip...');
-
     const currentBtcPrice = Math.trunc(await endpoints.getBTCPrice());
     const currentEthPrice = Math.trunc(await endpoints.getETHPrice());
-
-    // console.log(lastBtcPrice, lastEthPrice);
-    // console.log(currentBtcPrice, currentEthPrice);
 
     updateGoogleSheet(currentBtcPrice, currentEthPrice, cl);
 
