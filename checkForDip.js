@@ -4,12 +4,10 @@ const endpoints = require('./javascript/endpoints');
 const keys = require('./google-credentials.json');
 var { google } = require('googleapis');
 require('dotenv').config({ path: '.env' });
+process.env.NTBA_FIX_319 = 1;
+const moment = require('moment');
 
 
-sendDipAlertMessage = (coin, currentPrice, lastPrice, telegramBot) => {
-    const text = `${coin} IS DIPPING.\n\nIt dropped from $${lastPrice} to $${currentPrice} over the last 10 minutes—a dip of ${Math.trunc((1 - currentPrice / lastPrice) * 100)}%\n\nBTFD!!`;
-    telegramBot.bot.sendMessage(telegramBot.chatId, text);
-}
 
 checkForDip = async (priceArray, cl) => {
     let lastEthPrice = priceArray[1][1];
@@ -19,6 +17,11 @@ checkForDip = async (priceArray, cl) => {
 
     const currentBtcPrice = Math.trunc(await endpoints.getBTCPrice());
     const currentEthPrice = Math.trunc(await endpoints.getETHPrice());
+
+    // console.log(lastBtcPrice, lastEthPrice);
+    // console.log(currentBtcPrice, currentEthPrice);
+
+    updateGoogleSheet(currentBtcPrice, currentEthPrice, cl);
 
     if (lastBtcPrice != 'undefined' && (1 - (currentBtcPrice / lastBtcPrice) >= 0.015)) { //looking for 1.5% drop every 10 minutes
         // if(lastBtcPrice && currentBtcPrice != lastBtcPrice) {
@@ -32,11 +35,15 @@ checkForDip = async (priceArray, cl) => {
     if (lastEthPrice != 'undefined' && (1 - (currentEthPrice / lastEthPrice) >= 0.015)) { //looking for 1.5% drop every 10 minutes
         let coin = "ETHEREUM";
         const telegramBot = require('./telegramBot');
-        sendDipAlertMessage(coin, currentEthPrice, lastEthPrice);
+        sendDipAlertMessage(coin, currentEthPrice, lastEthPrice, telegramBot);
         turnOffBot(telegramBot);
     }
+}
 
-    updateGoogleSheet(currentBtcPrice, currentEthPrice, cl);
+sendDipAlertMessage = (coin, currentPrice, lastPrice, telegramBot) => {
+    const text = `${coin} IS DIPPING.\n\nIt dropped from $${lastPrice} to $${currentPrice} over the last 10 minutes—a dip of ${Math.trunc((1 - currentPrice / lastPrice) * 100)}%\n\nBTFD!!`;
+    telegramBot.bot.sendMessage(telegramBot.chatId, text);
+    console.log(`${moment().format('dddd')}, ${moment().format('l')} ${moment().format('LTS')} | Dip alert message sent for ${coin}`)
 }
 
 //https://www.tutorialsteacher.com/nodejs/nodejs-file-system

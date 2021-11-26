@@ -3,6 +3,7 @@
 const endpoints = require('./javascript/endpoints');
 const telegramBot = require('./telegramBot');
 require('dotenv').config({ path: '.env' });
+const moment = require('moment');
 
 sendGoodMorningMessage = async() => {
     const currentBtcPrice = Math.trunc(await endpoints.getBTCPrice());
@@ -21,6 +22,7 @@ sendGoodMorningMessage = async() => {
     \nOn this day last year, the price of Bitcoin was $${(Math.trunc(priceOfBtcOnThisDayLastYear)).toLocaleString()} and the price of Ethereum was $${(Math.trunc(priceOfEthOnThisDayLastYear)).toLocaleString()}
     `;
     telegramBot.bot.sendMessage(telegramBot.chatId, text);
+    console.log(`${moment().format('dddd')}, ${moment().format('l')} | Good morning message sent`)
 }
 
 sendGoodMorningMessage();
