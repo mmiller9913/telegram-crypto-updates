@@ -26,7 +26,7 @@ checkForDip = async (priceArray, cl) => {
         let coin = "BITCOIN";
         const telegramBot = require('./telegramBot');
         sendDipAlertMessage(coin, currentBtcPrice, lastBtcPrice, telegramBot);
-        turnOffBot(telegramBot);
+        turnOffBot(telegramBot, coin);
         // console.log(`BITCOIN IS DIPPING.\n\nIt dropped from $${lastBtcPrice} to $${btcPrice} over the last 10 minutes — a dip of ${Math.trunc((1-btcPrice/lastBtcPrice) * 100)}%\n\nBTFD!!`)
     }
 
@@ -34,7 +34,7 @@ checkForDip = async (priceArray, cl) => {
         let coin = "ETHEREUM";
         const telegramBot = require('./telegramBot');
         sendDipAlertMessage(coin, currentEthPrice, lastEthPrice, telegramBot);
-        turnOffBot(telegramBot);
+        turnOffBot(telegramBot, coin);
     }
 }
 
@@ -47,9 +47,9 @@ sendDipAlertMessage = (coin, currentPrice, lastPrice, telegramBot) => {
 //https://www.tutorialsteacher.com/nodejs/nodejs-file-system
 
 //need to turn off the bot after 10 seconds
-function turnOffBot(telegramBot) {
+function turnOffBot(telegramBot, coin) {
     setTimeout(() => {
-        console.log('Turning off the bot');
+        console.log(`Turning off the bot after sending dip alert message for ${coin}`);
         telegramBot.bot.stopPolling();
     }, 10000);
 }
@@ -105,7 +105,7 @@ async function updateGoogleSheet(btcPrice, ethPrice, cl) {
     };
 
     let response = await gsapi.spreadsheets.values.update(updateOptions);
-    
+
     console.log(`${moment().format('dddd')}, ${moment().format('l')} ${moment().format('LTS')} | Google Sheet successfuly updated with new BTC & ETH prices`)
 
 }

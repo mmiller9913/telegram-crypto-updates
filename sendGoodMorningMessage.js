@@ -30,6 +30,6 @@ sendGoodMorningMessage();
 
 //need to turn off the bot after 10 seconds
 setTimeout(() => {
-    console.log('Turning off the bot');
+    console.log('Turning off the bot after sending Good Morning message');
     telegramBot.bot.stopPolling();
 }, 10000);
