@@ -17,26 +17,44 @@ checkForDip = async (priceArray, cl) => {
     updateGoogleSheet(currentBtcPrice, currentEthPrice, cl);
 
     if (lastBtcPrice != 'undefined' && (1 - (currentBtcPrice / lastBtcPrice) >= 0.015)) { //looking for 1.5% drop every 10 minutes
-        // if(lastBtcPrice && currentBtcPrice != lastBtcPrice) {
         let coin = "BITCOIN";
         const telegramBot = require('./telegramBot');
         sendDipAlertMessage(coin, currentBtcPrice, lastBtcPrice, telegramBot);
         turnOffBot(telegramBot, coin);
-        // console.log(`BITCOIN IS DIPPING.\n\nIt dropped from $${lastBtcPrice} to $${btcPrice} over the last 10 minutes — a dip of ${Math.trunc((1-btcPrice/lastBtcPrice) * 100)}%\n\nBTFD!!`)
     }
 
-    if (lastEthPrice != 'undefined' && (1 - (currentEthPrice / lastEthPrice) >= 0.015)) { //looking for 1.5% drop every 10 minutes
+    if (lastEthPrice != 'undefined' && (1 - (currentEthPrice / lastEthPrice) >= 0.015) ) { //looking for 1.5% drop every 10 minutes
         let coin = "ETHEREUM";
         const telegramBot = require('./telegramBot');
         sendDipAlertMessage(coin, currentEthPrice, lastEthPrice, telegramBot);
         turnOffBot(telegramBot, coin);
     }
+
+    if (lastBtcPrice != 'undefined' && ( ((currentBtcPrice - lastBtcPrice)/lastBtcPrice) * 100 >= 0.02 )) { //looking for 2% increase every 10 minutes
+        let coin = "BITCOIN";
+        const telegramBot = require('./telegramBot');
+        sendPumpAlertMessage(coin, currentBtcPrice, lastBtcPrice, telegramBot);
+        turnOffBot(telegramBot, coin);
+    }
+
+    if (lastEthPrice != 'undefined' && ( ((currentEthPrice - lastEthPrice)/lastEthPrice) * 100 >= 0.02 )) { //looking for 2% increase every 10 minutes
+        let coin = "ETHEREUM";
+        const telegramBot = require('./telegramBot');
+        sendPumpAlertMessage(coin, currentEthPrice, lastEthPrice, telegramBot);
+        turnOffBot(telegramBot, coin);
+    }
 }
 
 sendDipAlertMessage = (coin, currentPrice, lastPrice, telegramBot) => {
-    const text = `${coin} IS DIPPING.\n\nIt dropped from $${lastPrice} to $${currentPrice} over the last 10 minutes—a dip of ${Math.trunc((1 - currentPrice / lastPrice) * 100)}%\n\nBTFD!!`;
+    const text = `${coin} IS DIPPING 🚨🚨🚨\n\nIt dropped from $${lastPrice} to $${currentPrice} over the last 10 minutes—a dip of ${Math.trunc((1 - currentPrice / lastPrice) * 100)}%\n\nBTFD!!`;
     telegramBot.bot.sendMessage(telegramBot.chatId, text);
     console.log(`${moment().format('dddd')}, ${moment().format('l')} ${moment().format('LTS')} | Dip alert message sent for ${coin}`)
+}
+
+sendPumpAlertMessage = (coin, currentPrice, lastPrice, telegramBot) => {
+    const text = `${coin} IS PUMPING 🚀🚀🚀\n\nIt went from $${lastPrice} to $${currentPrice} over the last 10 minutes—a pump of ${Math.trunc(((currentPrice - lastPrice)/lastPrice)* 100)}%!!`;
+    telegramBot.bot.sendMessage(telegramBot.chatId, text);
+    console.log(`${moment().format('dddd')}, ${moment().format('l')} ${moment().format('LTS')} | Pump alert message sent for ${coin}`)
 }
 
 //https://www.tutorialsteacher.com/nodejs/nodejs-file-system
