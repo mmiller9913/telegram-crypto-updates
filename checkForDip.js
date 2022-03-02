@@ -30,14 +30,14 @@ checkForDip = async (priceArray, cl) => {
         turnOffBot(telegramBot, coin);
     }
 
-    if (lastBtcPrice != 'undefined' && ( ((currentBtcPrice - lastBtcPrice)/lastBtcPrice) * 100 >= 0.02 )) { //looking for 2% increase every 10 minutes
+    if (lastBtcPrice != 'undefined' && ( ((currentBtcPrice - lastBtcPrice)/lastBtcPrice) * 100 >= 2 )) { //looking for 2% increase every 10 minutes
         let coin = "BITCOIN";
         const telegramBot = require('./telegramBot');
         sendPumpAlertMessage(coin, currentBtcPrice, lastBtcPrice, telegramBot);
         turnOffBot(telegramBot, coin);
     }
 
-    if (lastEthPrice != 'undefined' && ( ((currentEthPrice - lastEthPrice)/lastEthPrice) * 100 >= 0.02 )) { //looking for 2% increase every 10 minutes
+    if (lastEthPrice != 'undefined' && ( ((currentEthPrice - lastEthPrice)/lastEthPrice) * 100 >= 2 )) { //looking for 2% increase every 10 minutes
         let coin = "ETHEREUM";
         const telegramBot = require('./telegramBot');
         sendPumpAlertMessage(coin, currentEthPrice, lastEthPrice, telegramBot);
