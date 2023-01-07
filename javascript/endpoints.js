@@ -15,41 +15,37 @@ exports.getETHPrice = async () => {
     return ethereumPrice;
 }
 
+//need to check if the previous year was a leap year
 const year = new Date().getFullYear();
-const endDateForBTCAPI = `${year}-01-01`;
-const historicalBitcoinEndpoint = `https://api.coindesk.com/v1/bpi/historical/close.json?start=2020-05-10&end=${endDateForBTCAPI}`
+function leapYear(year) {
+    return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+}
+const daysOfDataToGetForAPI = leapYear(year - 1) ? 366 : 365;
+
+//figuring out how many days since the start of the year
+const now = new Date();
+const start = new Date(now.getFullYear(), 0, 1);
+const diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+const oneDay = 1000 * 60 * 60 * 24;
+const daysSinceStartOfTheYear = Math.floor(diff / oneDay);
+
+
+const historicalBitcoinEndpoint = `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=${daysOfDataToGetForAPI}&interval=1`; //the below api takes two arguments: # of days ago, and interval # of days
 exports.getHistoricalBTCPrice = async () => {
     const historicalBitcoinResponse = await fetch(historicalBitcoinEndpoint);
     const historicalBitcoinData = await historicalBitcoinResponse.json();
-    const today = new Date();
-    today.setMonth(today.getMonth() - 12); //setting the year to be 1 year ago
-    const oneYearAgoToday = today.toISOString().slice(0, 10);
-    const startOfYearBTCPrice = historicalBitcoinData.bpi[endDateForBTCAPI];
-    const priceAt2020Halving = historicalBitcoinData.bpi['2020-05-11'];
-    const priceOfBtcOnThisDayLastYear = historicalBitcoinData.bpi[oneYearAgoToday];
-    return [priceAt2020Halving, startOfYearBTCPrice, priceOfBtcOnThisDayLastYear];
+    const priceOfBtcOnThisDayLastYear = historicalBitcoinData.prices[0][1]; //the first entry in the results will be this day last year
+    const startOfYearBTCPrice = historicalBitcoinData.prices[daysOfDataToGetForAPI - daysSinceStartOfTheYear][1];
+    return [priceOfBtcOnThisDayLastYear, startOfYearBTCPrice];
 }
 
-//need to check if the previous year was a leap year
-function leapYear(year) {
-  return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
-}
-const daysOfDataToGetForEthAPI = leapYear(year - 1) ? 366 : 365;
 
-const historicalEthereumEndpoint = `https://api.coingecko.com/api/v3/coins/ethereum/market_chart?vs_currency=usd&days=${daysOfDataToGetForEthAPI}&interval=1`; //the below api takes two arguments: # of days ago, and interval # of days
-exports.getHistoricalETHPrice = async() => {
+const historicalEthereumEndpoint = `https://api.coingecko.com/api/v3/coins/ethereum/market_chart?vs_currency=usd&days=${daysOfDataToGetForAPI}&interval=1`; //the below api takes two arguments: # of days ago, and interval # of days
+exports.getHistoricalETHPrice = async () => {
     const historicalEthereumResponse = await fetch(historicalEthereumEndpoint);
     const historicalEthereumData = await historicalEthereumResponse.json();
     const priceOfEthOnThisDayLastYear = historicalEthereumData.prices[0][1]; //the first entry in the results will be this day last year
-
-    //figuring out how many days since the start of the year
-    const now = new Date();
-    const start = new Date(now.getFullYear(), 0, 1);
-    const diff  = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
-    const oneDay = 1000 * 60 * 60 * 24;
-    const daysSinceStartOfTheYear =  Math.floor(diff / oneDay);
-
-    const startOfYearEthPrice = historicalEthereumData.prices[daysOfDataToGetForEthAPI - daysSinceStartOfTheYear][1];
+    const startOfYearEthPrice = historicalEthereumData.prices[daysOfDataToGetForAPI - daysSinceStartOfTheYear][1];
 
     return [priceOfEthOnThisDayLastYear, startOfYearEthPrice];
 }
